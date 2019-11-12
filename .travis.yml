@@ -1,5 +1,26 @@
 sudo: false
 language: ruby
+cache:
+  - apt
 rvm:
-  - 2.4.2
-before_install: gem install bundler -v 1.16.2
+  - ruby-2.5.3
+
+gemfile:
+  - Gemfile-rails-4.2.x
+  - Gemfile-rails-5.0.x
+  - Gemfile-rails-5.1.x
+
+before_install:
+  - "find /home/travis/.rvm/rubies -wholename '*default/bundler-*.gemspec' -delete"
+  - 'gem uninstall -i /home/travis/.rvm/gems/ruby-2.5.3@global bundler -x'
+  - 'gem uninstall bundler -x'
+  - 'gem install bundler -v 1.17.3'
+  - 'gem update --system'
+
+before_script:
+  - 'cd spec/dummy && RAILS_ENV=test bundle _1.17.3_ exec rake --trace db:create db:schema:load && cd ../../'
+
+notifications:
+  email: false
+
+script: "bundle _1.17.3_ exec rspec spec --color --profile"

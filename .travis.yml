@@ -3,7 +3,7 @@ language: ruby
 cache:
   - apt
 rvm:
-  - ruby-2.5.3
+  - 2.5.6
 
 gemfile:
   - Gemfile-rails-4.2.x
@@ -11,13 +11,16 @@ gemfile:
   - Gemfile-rails-5.1.x
 
 before_install:
-  - "find /home/travis/.rvm/rubies -wholename '*default/bundler-*.gemspec' -delete"
-  - 'gem uninstall -i /home/travis/.rvm/gems/ruby-2.5.3@global bundler -x'
-  - 'gem uninstall bundler -x'
-  - 'gem install bundler -v 1.17.3'
-  - 'gem update --system'
+  - gem update --system
+  - gem uninstall -v '>= 2' -i $(rvm gemdir)@global -ax bundler || true
+  - gem install bundler -v '< 2'
+  - bundle --version
 
 notifications:
   email: false
 
-script: "bundle _1.17.3_ exec rspec spec --color --profile"
+script: "bundle exec rspec spec --color --profile"
+
+env:
+  global:
+    - BUNDLER_VERSION=1.17.3

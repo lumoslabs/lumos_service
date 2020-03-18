@@ -1,4 +1,4 @@
-source 'https://rubygems.org'
+source 'https://artifactory.ops.aws.lumoslabs.net/artifactory/api/gems/gems'
 
 gem 'activesupport', '~> 5.1.0'
 
